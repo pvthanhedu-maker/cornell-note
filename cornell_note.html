@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cornell Note – Phương pháp ghi chép thông minh</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:#f4f6fb;color:#1a1a2e;min-height:100vh}
+
+  /* TOP NAV */
+  .topnav{background:#fff;border-bottom:1px solid #e5e7ef;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+  .topnav-brand{font-size:17px;font-weight:600;color:#1a3a6b;letter-spacing:-0.3px}
+  .topnav-links{display:flex;gap:1.5rem}
+  .topnav-links a{font-size:13px;color:#555;text-decoration:none;padding:4px 0;border-bottom:2px solid transparent;transition:all 0.15s}
+  .topnav-links a:hover{color:#1a3a6b;border-bottom-color:#2563c7}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#1a3a6b 0%,#2563c7 55%,#1e8a6e 100%);padding:3.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,0.06)}
+  .hero::after{content:'';position:absolute;bottom:-40px;left:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.04)}
+  .hero-tag{display:inline-block;background:rgba(255,255,255,0.18);color:#fff;font-size:11px;padding:4px 14px;border-radius:20px;margin-bottom:14px;letter-spacing:0.8px;text-transform:uppercase}
+  .hero h1{font-size:42px;font-weight:700;color:#fff;line-height:1.1;margin-bottom:10px;letter-spacing:-1px}
+  .hero-sub{font-size:15px;color:rgba(255,255,255,0.82);margin-bottom:2rem;letter-spacing:0.3px}
+  .hero-stats{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+  .stat{background:rgba(255,255,255,0.14);border-radius:12px;padding:12px 22px;min-width:90px}
+  .stat-num{font-size:22px;font-weight:700;color:#fff}
+  .stat-label{font-size:11px;color:rgba(255,255,255,0.72);margin-top:2px}
+
+  /* MAIN LAYOUT */
+  .container{max-width:860px;margin:0 auto;padding:2rem 1.5rem}
+  .section{margin-bottom:2.5rem}
+  .section-header{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
+  .section-num{width:32px;height:32px;border-radius:50%;background:#1a3a6b;color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .section-title{font-size:19px;font-weight:600;color:#1a1a2e}
+
+  /* CARDS */
+  .card{background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:1.4rem}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+
+  /* INFO ROWS */
+  .info-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #f0f2f7}
+  .info-row:last-child{border-bottom:none}
+  .info-icon{color:#2563c7;font-size:18px;margin-top:1px;flex-shrink:0}
+  .info-text{font-size:14px;color:#444;line-height:1.6}
+  .info-text strong{color:#1a1a2e;font-weight:600}
+
+  /* AUTHOR */
+  .author-card{display:flex;gap:16px;align-items:flex-start}
+  .author-avatar{width:60px;height:60px;border-radius:50%;background:#1a3a6b;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+  .author-info h3{font-size:16px;font-weight:600;margin-bottom:5px}
+  .author-info p{font-size:13px;color:#555;line-height:1.6}
+  .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .tag{background:#f0f4ff;border:1px solid #dbe4ff;border-radius:20px;padding:3px 10px;font-size:11px;color:#2563c7}
+  .divider{height:1px;background:#f0f2f7;margin:1.2rem 0}
+
+  /* CORNELL LAYOUT VISUAL */
+  .cornell-layout{border:2px solid #2563c7;border-radius:10px;overflow:hidden;margin:1rem 0}
+  .cornell-title-bar{background:#2563c7;color:#fff;text-align:center;padding:11px;font-size:13px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase}
+  .cornell-body{display:flex;min-height:170px}
+  .cornell-left{width:30%;background:#FEF9EC;border-right:2px solid #2563c7;padding:14px}
+  .cornell-right{flex:1;background:#EEF5FF;padding:14px}
+  .cornell-label{font-size:10px;font-weight:700;color:#1a3a6b;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase}
+  .cornell-pct{font-size:30px;font-weight:700;color:#2563c7;margin-bottom:5px}
+  .cornell-items{font-size:12px;color:#555;line-height:2}
+  .cornell-summary{background:#E6F4EF;border-top:2px solid #2563c7;padding:12px 14px;font-size:13px;color:#0F6E56;font-weight:500}
+
+  /* PROGRESS */
+  .progress-bar{height:5px;background:#e5e7ef;border-radius:10px;margin-top:8px}
+  .progress-fill{height:5px;border-radius:10px}
+
+  /* STEPS */
+  .step-flow{display:flex;flex-direction:column}
+  .step{display:flex;align-items:stretch;gap:0}
+  .step-line{display:flex;flex-direction:column;align-items:center;width:44px;flex-shrink:0}
+  .step-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;z-index:1}
+  .step-connector{width:2px;flex:1;background:#e5e7ef;min-height:18px}
+  .step-content{flex:1;padding:4px 0 20px 14px}
+  .step-r{font-size:15px;font-weight:600;margin-bottom:4px}
+  .step-desc{font-size:13px;color:#555;line-height:1.6}
+
+  /* BENEFITS */
+  .benefit-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .benefit{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#f4f6fb;border-radius:10px;border:1px solid #e5e7ef}
+  .benefit-icon{width:32px;height:32px;border-radius:8px;background:#e6f4ef;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+  .benefit span{font-size:13px;color:#1a1a2e;font-weight:500}
+
+  /* APP GRID */
+  .app-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .app-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #e5e7ef;border-radius:12px;background:#fff}
+  .app-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .app-name{font-size:13px;font-weight:600;color:#1a1a2e}
+  .app-sub{font-size:11px;color:#888;margin-top:1px}
+
+  /* COMPARE TABLE */
+  .compare-table{width:100%;border-collapse:collapse;font-size:13px}
+  .compare-table th{padding:11px 16px;font-weight:600;font-size:12px;letter-spacing:0.3px}
+  .compare-table td{padding:11px 16px;border-top:1px solid #f0f2f7}
+  .th-trad{background:#f5f5f5;color:#555;text-align:left}
+  .th-vs{background:#e8e8e8;color:#999;text-align:center;width:54px}
+  .th-cornell{background:#1a3a6b;color:#fff;text-align:left}
+  .td-cornell{color:#1a3a6b;font-weight:600}
+  .badge-bad{background:#fef2f2;color:#a32d2d;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:500}
+  .badge-good{background:#e6f4ef;color:#0F6E56;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:500}
+
+  /* MESSAGE */
+  .message-box{background:#EEF5FF;border-left:4px solid #2563c7;border-radius:0 12px 12px 0;padding:1.2rem 1.5rem;margin-top:2rem}
+  .message-box p{font-size:16px;color:#1a3a6b;line-height:1.75;font-style:italic;font-weight:500}
+  .message-box .attr{font-size:12px;color:#2563c7;margin-top:8px;font-style:normal;font-weight:600}
+
+  /* CTA BUTTON */
+  .cta-btn{display:inline-block;background:#1a3a6b;color:#fff;padding:12px 28px;border-radius:25px;text-decoration:none;font-size:14px;font-weight:600;margin-top:1.5rem;transition:background 0.15s}
+  .cta-btn:hover{background:#2563c7}
+
+  /* FOOTER */
+  footer{background:#1a1a2e;color:rgba(255,255,255,0.6);text-align:center;padding:2rem;font-size:13px;margin-top:3rem}
+  footer strong{color:#fff}
+
+  @media(max-width:600px){
+    .hero h1{font-size:30px}
+    .grid-2,.grid-3,.benefit-list,.app-grid{grid-template-columns:1fr}
+    .topnav-links{display:none}
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-brand">📓 Cornell Note</div>
+  <div class="topnav-links">
+    <a href="#nguon-goc">Nguồn gốc</a>
+    <a href="#cau-truc">Cấu trúc</a>
+    <a href="#quy-trinh">Quy trình 5R</a>
+    <a href="#loi-ich">Lợi ích</a>
+    <a href="#so-sanh">So sánh</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <span class="hero-tag">Phương pháp học tập</span>
+  <h1>Cornell Note</h1>
+  <p class="hero-sub">Ghi chép thông minh · Học tập chủ động · Ghi nhớ lâu dài</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">5R</div><div class="stat-label">Quy trình</div></div>
+    <div class="stat"><div class="stat-num">70%</div><div class="stat-label">Hiệu quả ghi nhớ</div></div>
+    <div class="stat"><div class="stat-num">1950s</div><div class="stat-label">Phát triển</div></div>
+    <div class="stat"><div class="stat-num">8+</div><div class="stat-label">Lĩnh vực áp dụng</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 1. NGUON GOC -->
+  <div class="section" id="nguon-goc">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Nguồn gốc</div>
+    </div>
+    <div class="card">
+      <div class="author-card">
+        <div class="author-avatar">👨‍🏫</div>
+        <div class="author-info">
+          <h3>Walter Pauk</h3>
+          <p>Chuyên gia giáo dục tại Đại học Cornell, Hoa Kỳ. Phát triển phương pháp vào thập niên 1950 và công bố trong cuốn <em>How to Study in College</em> (1962).</p>
+          <div class="tag-row">
+            <span class="tag">Cornell University</span>
+            <span class="tag">Thập niên 1950</span>
+            <span class="tag">How to Study in College</span>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="info-row">
+        <span class="info-icon">🎯</span>
+        <div class="info-text"><strong>Mục tiêu:</strong> Ghi chép khoa học · Tổ chức kiến thức · Nâng cao hiệu quả ôn tập</div>
+      </div>
+      <div class="info-row">
+        <span class="info-icon">🔬</span>
+        <div class="info-text"><strong>Nghiên cứu:</strong> Wichita State University (2010) và các nghiên cứu gần đây (2023) đều xác nhận Cornell giúp tăng khả năng hiểu sâu và ghi nhớ kiến thức lâu dài.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. CAU TRUC -->
+  <div class="section" id="cau-truc">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">Cấu trúc trang Cornell</div>
+    </div>
+    <div class="card">
+      <div class="cornell-layout">
+        <div class="cornell-title-bar">TIÊU ĐỀ BÀI HỌC</div>
+        <div class="cornell-body">
+          <div class="cornell-left">
+            <div class="cornell-label">Từ khóa / Câu hỏi</div>
+            <div class="cornell-pct">30%</div>
+            <div class="cornell-items">• Từ khóa<br>• Câu hỏi<br>• Khái niệm trọng tâm</div>
+          </div>
+          <div class="cornell-right">
+            <div class="cornell-label">Ghi chú chính</div>
+            <div class="cornell-pct">70%</div>
+            <div class="cornell-items">• Nội dung bài học<br>• Công thức<br>• Ví dụ minh họa<br>• Ý chính</div>
+          </div>
+        </div>
+        <div class="cornell-summary">📝 <strong>TÓM TẮT</strong> — Tổng hợp nội dung bằng ngôn ngữ của bản thân</div>
+      </div>
+      <div class="grid-3" style="margin-top:14px">
+        <div style="background:#FEF9EC;border-radius:10px;padding:13px">
+          <div style="font-size:12px;font-weight:700;color:#854F0B;margin-bottom:4px">Cột từ khóa (30%)</div>
+          <div style="font-size:12px;color:#633806">Từ khóa · Câu hỏi · Khái niệm</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:30%;background:#BA7517"></div></div>
+        </div>
+        <div style="background:#EEF5FF;border-radius:10px;padding:13px">
+          <div style="font-size:12px;font-weight:700;color:#0C447C;margin-bottom:4px">Cột ghi chú (70%)</div>
+          <div style="font-size:12px;color:#185FA5">Nội dung · Công thức · Ví dụ</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:70%;background:#2563c7"></div></div>
+        </div>
+        <div style="background:#E6F4EF;border-radius:10px;padding:13px">
+          <div style="font-size:12px;font-weight:700;color:#085041;margin-bottom:4px">Phần tóm tắt</div>
+          <div style="font-size:12px;color:#0F6E56">Tổng hợp · Ngôn ngữ riêng</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#1e8a6e"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. QUY TRINH 5R -->
+  <div class="section" id="quy-trinh">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">Quy trình 5R</div>
+    </div>
+    <div class="card">
+      <div class="step-flow">
+        <div class="step">
+          <div class="step-line"><div class="step-dot" style="background:#2563c7">R</div><div class="step-connector"></div></div>
+          <div class="step-content"><div class="step-r">Record — Ghi chép</div><div class="step-desc">Ghi chép nội dung chính trong khi nghe giảng hoặc đọc tài liệu vào cột ghi chú (70%).</div></div>
+        </div>
+        <div class="step">
+          <div class="step-line"><div class="step-dot" style="background:#1e8a6e">R</div><div class="step-connector"></div></div>
+          <div class="step-content"><div class="step-r">Reduce — Rút gọn</div><div class="step-desc">Sau buổi học, rút gọn nội dung thành từ khóa và câu hỏi vào cột trái (30%).</div></div>
+        </div>
+        <div class="step">
+          <div class="step-line"><div class="step-dot" style="background:#BA7517">R</div><div class="step-connector"></div></div>
+          <div class="step-content"><div class="step-r">Recite — Trình bày lại</div><div class="step-desc">Che cột ghi chú, dùng từ khóa để tự trình bày lại kiến thức bằng lời của mình.</div></div>
+        </div>
+        <div class="step">
+          <div class="step-line"><div class="step-dot" style="background:#534AB7">R</div><div class="step-connector"></div></div>
+          <div class="step-content"><div class="step-r">Reflect — Suy ngẫm</div><div class="step-desc">Liên hệ kiến thức với thực tế, suy ngẫm sâu và tìm mối liên hệ với những gì đã biết.</div></div>
+        </div>
+        <div class="step">
+          <div class="step-line"><div class="step-dot" style="background:#993C1D">R</div></div>
+          <div class="step-content"><div class="step-r">Review — Ôn tập</div><div class="step-desc">Ôn tập định kỳ — sau 24h, 1 tuần, 1 tháng — để củng cố ghi nhớ lâu dài.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. LOI ICH -->
+  <div class="section" id="loi-ich">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">Lợi ích</div>
+    </div>
+    <div class="benefit-list">
+      <div class="benefit"><div class="benefit-icon">🧩</div><span>Hệ thống hóa kiến thức</span></div>
+      <div class="benefit"><div class="benefit-icon">🧠</div><span>Tăng khả năng ghi nhớ</span></div>
+      <div class="benefit"><div class="benefit-icon">⚡</div><span>Học tập chủ động</span></div>
+      <div class="benefit"><div class="benefit-icon">📋</div><span>Dễ ôn thi</span></div>
+      <div class="benefit"><div class="benefit-icon">⏱️</div><span>Tiết kiệm thời gian</span></div>
+      <div class="benefit"><div class="benefit-icon">💬</div><span>Phát triển tư duy phản biện</span></div>
+    </div>
+  </div>
+
+  <!-- 5. UNG DUNG -->
+  <div class="section" id="ung-dung">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">Ứng dụng</div>
+    </div>
+    <div class="app-grid">
+      <div class="app-item"><div class="app-icon" style="background:#EEF5FF">📖</div><div><div class="app-name">Lịch sử · Địa lý · Ngữ văn</div><div class="app-sub">Khoa học xã hội</div></div></div>
+      <div class="app-item"><div class="app-icon" style="background:#FEF9EC">🧮</div><div><div class="app-name">Toán học</div><div class="app-sub">Công thức, định lý</div></div></div>
+      <div class="app-item"><div class="app-icon" style="background:#E6F4EF">⚛️</div><div><div class="app-name">Vật lý · Hóa học</div><div class="app-sub">Khoa học tự nhiên</div></div></div>
+      <div class="app-item"><div class="app-icon" style="background:#F0EEFE">🧬</div><div><div class="app-name">Sinh học</div><div class="app-sub">Khoa học sự sống</div></div></div>
+      <div class="app-item"><div class="app-icon" style="background:#EEF5FF">🌍</div><div><div class="app-name">Ngoại ngữ</div><div class="app-sub">Từ vựng, ngữ pháp</div></div></div>
+      <div class="app-item"><div class="app-icon" style="background:#FEF9EC">💼</div><div><div class="app-name">Họp hành · Công việc</div><div class="app-sub">Môi trường chuyên nghiệp</div></div></div>
+      <div class="app-item"><div class="app-icon" style="background:#E6F4EF">📚</div><div><div class="app-name">Đọc sách · Nghiên cứu</div><div class="app-sub">Tự học & hàn lâm</div></div></div>
+    </div>
+  </div>
+
+  <!-- 6. SO SANH -->
+  <div class="section" id="so-sanh">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">Cornell vs Ghi chép truyền thống</div>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="th-trad">Truyền thống</th>
+            <th class="th-vs">VS</th>
+            <th class="th-cornell">Cornell</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="badge-bad">Ghi liên tục</span></td><td style="text-align:center;color:#bbb;font-size:13px">↔</td><td><span class="badge-good">Chia 3 vùng rõ ràng</span></td></tr>
+          <tr><td><span class="badge-bad">Ghi nguyên văn</span></td><td style="text-align:center;color:#bbb;font-size:13px">↔</td><td><span class="badge-good">Ngôn ngữ của bản thân</span></td></tr>
+          <tr><td><span class="badge-bad">Chỉ ghi chép</span></td><td style="text-align:center;color:#bbb;font-size:13px">↔</td><td><span class="badge-good">Có quy trình 5R</span></td></tr>
+          <tr><td><span class="badge-bad">Đọc lại thụ động</span></td><td style="text-align:center;color:#bbb;font-size:13px">↔</td><td><span class="badge-good">Tự kiểm tra chủ động</span></td></tr>
+          <tr><td><span class="badge-bad">Dễ quên</span></td><td style="text-align:center;color:#bbb;font-size:13px">↔</td><td><span class="badge-good">Ghi nhớ lâu dài</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MESSAGE -->
+  <div class="message-box">
+    <p>"Không chỉ ghi lại kiến thức, mà còn biến kiến thức thành của chính mình."</p>
+    <div class="attr">— Walter Pauk · Cornell Note Method</div>
+  </div>
+
+</div>
+
+<footer>
+  <strong>Cornell Note</strong> · Phương pháp ghi chép thông minh<br>
+  <span style="font-size:11px;margin-top:4px;display:block">Walter Pauk · Cornell University · Since 1950s</span>
+</footer>
+
+</body>
+</html>
